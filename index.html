@@ -91,6 +91,27 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lamp);outline-o
 .joy{position:absolute;z-index:5;left:max(18px,env(safe-area-inset-left,0px));bottom:calc(max(14px,env(safe-area-inset-bottom,0px)) + 84px);width:112px;height:112px;border-radius:50%;display:none;touch-action:none}
 .joy b{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.28);border:1px solid rgba(255,255,255,.4)}
 @media (pointer:coarse){.joy{display:block}}
+.joy{background:radial-gradient(circle,rgba(255,255,255,.04),rgba(255,255,255,.12));border:1px solid rgba(255,255,255,.28)}
+#app button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.hud,.bar,#labels{user-select:none;-webkit-user-select:none}
+@media (max-width:520px){
+  .brand{display:none}
+  .tl .sub{border-left:0;padding:0 8px 0 0}
+  #btnDonate span{display:none}
+  #btnDonate{width:34px;padding:0;justify-content:center}
+  .ib.wide{padding:0 8px}
+  .tag{font-size:11px}
+  .bub{font-size:12px;max-width:180px}
+  .pop{bottom:calc(max(14px,env(safe-area-inset-bottom,0px)) + 66px)}
+  .lines button{font-size:12.5px;padding:7px 10px}
+  .drawer{top:56px;max-height:calc(100% - 140px);overflow:auto}
+}
+@media (max-height:480px) and (orientation:landscape){
+  .joy{bottom:max(14px,env(safe-area-inset-bottom,0px));width:96px;height:96px}
+  .bar{left:auto;right:max(12px,env(safe-area-inset-right,0px));transform:none}
+  .entry{place-items:start center}
+  .preview{height:110px}
+}
 
 /* Màn vào quán */
 .entry{position:absolute;inset:0;z-index:10;display:grid;place-items:center;padding:16px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));
@@ -237,6 +258,18 @@ const SKINS = [0xf1c7a0,0xe3b089,0xcf956b,0xae7550];
 const HAIRS = [0x1b1410,0x2e1f16,0x4a3020,0x5c5c5c];
 const PANTS = [0x2d3550,0x3b3b3b,0x5a4a3a,0x24324a];
 const PRICE = 3000;
+// Chơi chung trên web: điền Project URL và anon key (khóa công khai) của Supabase. Để trống thì quán chạy một người.
+const SUPABASE_URL = "";
+const SUPABASE_KEY = "";
+const SUPABASE_JS = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js";
+
+// tên tục thì hiện thành tên trung tính
+const BAD_WORDS = ["địt","đụ","lồn","cặc","buồi","đéo","đĩ","đcm","đmm","fuck","shit","bitch"];
+const BAD_SHORT = /(^|[^a-z])(vcl|vkl|clm|dcm|dmm|cmm|dm|cc|dit|deo)([^a-z]|$)/;
+function cleanName(n){
+  const s = String(n || "").normalize("NFC").toLowerCase();
+  return BAD_WORDS.some(w => s.includes(w)) || BAD_SHORT.test(s) ? "Khách lịch sự" : String(n || "Khách").slice(0, 18);
+}
 const randName = () => FIRST[Math.floor(Math.random()*FIRST.length)] + " " + NICK[Math.floor(Math.random()*NICK.length)];
 
 const me = {
@@ -253,7 +286,8 @@ const canvas = $("c");
 let renderer;
 try { renderer = new T.WebGLRenderer({canvas, antialias:true}); }
 catch(e){ $("app").innerHTML = '<div class="fallback">Máy hoặc trình duyệt này chưa bật WebGL nên không vẽ được quán 3D.</div>'; return; }
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+const coarse = matchMedia("(pointer:coarse)").matches;
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, coarse ? 1.4 : 1.75));
 const scene = new T.Scene();
 scene.background = new T.Color(0x0b0f1c);
 scene.fog = new T.Fog(0x0b0f1c, 16, 46);
@@ -824,7 +858,7 @@ function syncRemotes(list){
     const pr = p.presence || {};
     if (typeof pr.x !== "number" || typeof pr.z !== "number") return;
     seen.add(p.peer);
-    const o = {name:String(pr.n || "Khách").slice(0,18), color:safeColor(pr.c), gender: pr.g === "f" ? "f" : "m"};
+    const o = {name:cleanName(pr.n), color:safeColor(pr.c), gender: pr.g === "f" ? "f" : "m"};
     let st = remotes.get(p.peer);
     if (!st) {
       st = charState(Object.assign({key:p.peer, x:clamp(pr.x,-15,15), z:clamp(pr.z,-0.9,7.9), r:num(pr.r), sid:num(pr.sid), aid:num(pr.aid)}, o), "peer");
@@ -911,7 +945,7 @@ COLORS.forEach(([c, label]) => {
 $("go").addEventListener("click", enter);
 nameIn.addEventListener("keydown", e => { if (e.key === "Enter") enter(); });
 function enter(){
-  me.name = (nameIn.value.trim() || me.name).slice(0, 18);
+  me.name = cleanName((nameIn.value.trim() || me.name).slice(0, 18)); nameIn.value = me.name;
   store.set("tdvh.name", me.name); store.set("tdvh.color", me.color); store.set("tdvh.gender", me.gender);
   if (player) removeChar(player);
   player = charState({key:"me-" + me.name, name:me.name, color:me.color, gender:me.gender, x:me.x, z:me.z, r:me.r}, "me");
@@ -919,6 +953,7 @@ function enter(){
   entered = true; $("entry").hidden = true;
   ["hudL","hudR","hint","bar"].forEach(id => $(id).hidden = false);
   yaw = me.r + Math.PI;
+  dist = portrait ? 6.4 : 4.6; pitch = portrait ? 0.5 : 0.42;
   sendPresence(true); updateOnline(); scheduleSave();
 }
 $("btnBack").addEventListener("click", () => {
@@ -931,9 +966,11 @@ $("btnBack").addEventListener("click", () => {
 
 // ---------- vòng lặp ----------
 const v3 = new T.Vector3();
-let last = performance.now(), t = 0, npcTimer = 4, hornTimer = 8;
+let last = performance.now(), t = 0, npcTimer = 4, hornTimer = 8, portrait = false;
 function resize(){
   const w = $("app").clientWidth, h = $("app").clientHeight;
+  portrait = h > w * 1.1;
+  camera.fov = portrait ? 64 : 55;
   renderer.setSize(w, h, false); camera.aspect = w / Math.max(1, h); camera.updateProjectionMatrix();
   const pw = pvCanvas.clientWidth || 340, ph = pvCanvas.clientHeight || 170;
   pvR.setSize(pw, ph, false); pvCam.aspect = pw / ph; pvCam.updateProjectionMatrix();
@@ -1054,11 +1091,108 @@ function frame(now){
   requestAnimationFrame(frame);
 })();
 
+// ---------- Supabase: cùng giao diện với room/db của claude.ai ----------
+function loadScript(src){ return new Promise((ok, fail) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = fail; document.head.appendChild(s); }); }
+function makeSbRoom(sb, baseKey){
+  const tabKey = baseKey + "-" + Math.random().toString(36).slice(2, 7);
+  const ch = sb.channel("quan-tra-da", {config:{presence:{key:tabKey}, broadcast:{self:false}}});
+  const peersCbs = [], connCbs = [], moves = {};
+  let state = {}, subscribed = false, lastRest = "", lastTrack = 0, lastMove = 0, trail = null;
+  function build(){
+    const ps = ch.presenceState(), list = [];
+    for (const k in ps) {
+      const metas = ps[k], m = metas[metas.length - 1] || {}, mv = moves[k];
+      const pres = Object.assign({}, m);
+      if (mv && mv.t > num(m.t) && typeof pres.x === "number") { pres.x = mv.x; pres.z = mv.z; pres.r = mv.r; }
+      list.push({peer:k, kind:"viewer", isMe:k === tabKey, sameTab:k === tabKey, presence:pres});
+    }
+    for (const k in moves) if (!ps[k]) delete moves[k];
+    peersCbs.forEach(f => f({peers:list}));
+  }
+  ch.on("presence", {event:"sync"}, build);
+  ch.on("broadcast", {event:"mv"}, ({payload}) => {
+    if (!payload || typeof payload.k !== "string") return;
+    moves[payload.k] = {x:num(payload.x), z:num(payload.z), r:num(payload.r), t:num(payload.t)};
+    build();
+  });
+  ch.subscribe(status => {
+    const was = subscribed; subscribed = status === "SUBSCRIBED";
+    if (subscribed && !was && Object.keys(state).length) { lastRest = ""; flush(true); }
+    connCbs.forEach(f => f(subscribed));
+  });
+  function flush(forceTrack){
+    clearTimeout(trail); trail = null;
+    if (!subscribed) return;
+    const now = Date.now();
+    const rest = Object.assign({}, state); delete rest.x; delete rest.z; delete rest.r;
+    const restSig = JSON.stringify(rest) + (typeof state.x === "number" ? "" : "|away");
+    if (forceTrack || restSig !== lastRest || now - lastTrack > 3000) {
+      lastRest = restSig; lastTrack = now;
+      ch.track(Object.assign({}, state, {t:now})).catch(() => {});
+    } else if (typeof state.x === "number") {
+      if (now - lastMove < 250) { trail = setTimeout(() => flush(false), 260); return; }
+      lastMove = now;
+      ch.send({type:"broadcast", event:"mv", payload:{k:tabKey, x:state.x, z:state.z, r:state.r, t:now}}).catch(() => {});
+    }
+  }
+  return {
+    presence(p){ for (const k in p) { if (p[k] === null) delete state[k]; else state[k] = p[k]; } flush(false); return Promise.resolve(); },
+    connected(){ return subscribed; },
+    onPeers(cb){ peersCbs.push(cb); setTimeout(build, 0); return () => {}; },
+    onConnection(cb){ connCbs.push(cb); setTimeout(() => cb(subscribed), 0); return () => {}; }
+  };
+}
+function makeSbDb(sb){
+  const loaders = [];
+  const refresh = () => loaders.forEach(f => f());
+  return {
+    doc(path){
+      const id = path.split("/")[1];
+      return {
+        async get(){ const {data, error} = await sb.from("cups").select("name,n").eq("id", id).maybeSingle(); if (error) throw {code:"unavailable", message:error.message}; return {exists:!!data, data:() => data}; },
+        async set(v){ const {error} = await sb.from("cups").upsert({id, name:cleanName(v.name), n:Math.max(0, Math.floor(num(v.n))), updated_at:new Date().toISOString()}); if (error) throw {code:"invalid_argument", message:error.message}; refresh(); }
+      };
+    },
+    collection(){
+      const q = {
+        orderBy(){ return q; }, limit(){ return q; },
+        onSnapshot(cb, err){
+          let failed = false;
+          const load = async () => {
+            if (failed) return;
+            const {data, error} = await sb.from("cups").select("id,name,n").order("n", {ascending:false}).limit(100);
+            if (error) { failed = true; if (err) err({code:"unavailable", message:error.message}); return; }
+            cb({metadata:{fromCache:false}, docs:data.map(r => ({id:r.id, data:() => r}))});
+          };
+          loaders.push(load); load(); setInterval(load, 20000);
+          return () => {};
+        }
+      };
+      return q;
+    }
+  };
+}
+async function connectSupabase(){
+  try { await loadScript(SUPABASE_JS); } catch(e){ return null; }
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  let id = null;
+  try {
+    let s = (await sb.auth.getSession()).data.session;
+    if (!s) s = (await sb.auth.signInAnonymously()).data.session;
+    id = s ? s.user.id : null;
+  } catch(e){ id = null; }
+  return {room: makeSbRoom(sb, id || "guest" + Math.random().toString(36).slice(2, 8)), db: id ? makeSbDb(sb) : null, uid: id};
+}
+
 (async () => {
-  if (!window.claude || !window.claude.use) return;
-  const [r, d, u] = await Promise.all([claude.use("room").catch(() => null), claude.use("db").catch(() => null), claude.use("user").catch(() => null)]);
-  room = r; db = d;
-  if (u) { try { uid = await u.id(); } catch(e){ uid = null; } }
+  if (window.claude && window.claude.use) {
+    const [r, d, u] = await Promise.all([claude.use("room").catch(() => null), claude.use("db").catch(() => null), claude.use("user").catch(() => null)]);
+    room = r; db = d;
+    if (u) { try { uid = await u.id(); } catch(e){ uid = null; } }
+  } else if (SUPABASE_URL && SUPABASE_KEY) {
+    const c = await connectSupabase();
+    if (c) { room = c.room; db = c.db; uid = c.uid; }
+  } else return;
   if (room) {
     room.onPeers(ch => syncRemotes(ch.peers), () => { room = null; remotes.forEach(removeChar); remotes.clear(); updateOnline(); });
     room.onConnection(() => updateOnline());
@@ -1069,7 +1203,7 @@ function frame(now){
     const timer = setTimeout(() => { $("ledgerNote").textContent = "Chưa mở được sổ chung, thử tải lại sau."; }, 10000);
     db.collection("cups").orderBy("n", "desc").limit(500).onSnapshot(snap => {
       if (!snap.metadata.fromCache) clearTimeout(timer);
-      ledgerRows = snap.docs.map(doc => { const v = doc.data() || {}; return {name:String(v.name || "Khách").slice(0, 18), n:num(v.n), mine:doc.id === uid}; });
+      ledgerRows = snap.docs.map(doc => { const v = doc.data() || {}; return {name:cleanName(v.name), n:num(v.n), mine:doc.id === uid}; });
       updateCups();
     }, () => { clearTimeout(timer); renderLedger(); });
   }
