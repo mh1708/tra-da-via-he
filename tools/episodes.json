@@ -1,0 +1,249 @@
+[
+  {
+    "id": "01-khong-biet-code",
+    "duration": 22,
+    "desc": "Không biết code mà vẫn có quán trà đá riêng ☕ Vào ngồi thử link ở bio nhé!",
+    "tags": "#vibecoding #tradavihe #hanoi #laptrinh #trada",
+    "start": {"x": -0.5, "z": -0.5, "r": 0.2},
+    "shots": [
+      {"t0": 0, "cap": "Không biết code…<br>nhờ AI làm cả <b>quán trà đá vỉa hè</b>",
+       "cam": {"tx": -3.2, "ty": 1.5, "tz": 3.4, "yaw": 4.09, "pitch": 0.42, "dist": 12.5}, "to": {"yaw": 3.49, "pitch": 0.38, "dist": 10}},
+      {"t0": 3.5, "cap": "Ngồi <b>ghế nhựa xanh đỏ</b><br>đúng chất Hà Nội", "follow": true,
+       "cam": {"ty": 1.1, "yaw": 3.39, "pitch": 0.36, "dist": 5.4}},
+      {"t0": 7.4, "cap": "Gọi một tiếng<br>là <b>cô Hoa rót tận tay</b>",
+       "cam": {"tx": -4.5, "ty": 1.05, "tz": 5.6, "yaw": 2.36, "pitch": 0.3, "dist": 5.6}, "to": {"yaw": 2.45}},
+      {"t0": 13.3, "cap": "Chém gió <b>cả đêm</b><br>không hết chuyện",
+       "cam": {"tx": -2.95, "ty": 0.95, "tz": 3.05, "yaw": 0.12, "pitch": 0.26, "dist": 4.0}, "to": {"yaw": 0.32}},
+      {"t0": 18.6, "cap": "Vào quán ngồi miễn phí<br><b>link ở bio 👇</b>",
+       "cam": {"tx": -2.6, "ty": 1.4, "tz": 3.6, "yaw": 4.0, "pitch": 0.42, "dist": 7}, "to": {"yaw": 4.45, "pitch": 0.72, "dist": 13}}
+    ],
+    "events": [
+      {"t": 3.5, "type": "walk", "path": [[-1.6, 2.4], [-2.55, 3.4]], "dur": 3.1},
+      {"t": 6.6, "type": "sit", "seat": 1},
+      {"t": 7.8, "type": "tea"},
+      {"t": 11.6, "type": "sip"},
+      {"t": 13.6, "type": "say", "text": "Code chạy được thì đừng ai động vào."},
+      {"t": 15.4, "type": "say", "who": "tu", "text": "Thế thì uống trà đi, động gì!"},
+      {"t": 17.2, "type": "say", "text": "Dô! Một, hai, ba, dô!"},
+      {"t": 17.2, "type": "act", "act": "cheers"},
+      {"t": 17.2, "type": "act", "who": "tu", "act": "cheers"}
+    ]
+  },
+  {
+    "id": "02-no-co-hoa-100-coc",
+    "duration": 20,
+    "desc": "Gọi trà liên tục và cái kết nợ cô Hoa 300 nghìn 😭 Ai trả nợ hộ không?",
+    "tags": "#tradavihe #vibecoding #hanoi #trada #funny",
+    "start": {"seat": 1},
+    "shots": [
+      {"t0": 0, "cap": "Thử gọi trà đá<br><b>liên tục</b> xem sao…",
+       "cam": {"tx": -4.5, "ty": 1.05, "tz": 5.6, "yaw": 2.36, "pitch": 0.3, "dist": 5.6}, "to": {"yaw": 2.5}},
+      {"t0": 7, "cap": "Sổ nợ của cô Hoa<br><b>tăng vọt</b> 📈",
+       "cam": {"tx": -3.0, "ty": 1.0, "tz": 3.3, "yaw": 4.36, "pitch": 0.22, "dist": 3.4}, "to": {"dist": 2.9}},
+      {"t0": 14, "cap": "Ai trả nợ hộ<br>mình <b>không</b> 😭",
+       "cam": {"tx": -5.85, "ty": 1.1, "tz": 7.0, "yaw": 3.3, "pitch": 0.14, "dist": 2.2}, "to": {"dist": 1.8}}
+    ],
+    "events": [
+      {"t": 0.5, "type": "tea"},
+      {"t": 3.6, "type": "tea"},
+      {"t": 7, "type": "tally", "from": 2, "to": 100, "dur": 6},
+      {"t": 7.4, "type": "say", "text": "Cô ơi thêm cốc nữa!"},
+      {"t": 10, "type": "act", "act": "sip"},
+      {"t": 10.6, "type": "say", "text": "Thêm cốc nữa!!"},
+      {"t": 14.3, "type": "say", "who": "co", "text": "Bao giờ trả đây cháu?!"},
+      {"t": 16.6, "type": "say", "text": "Mai… mai cháu trả!"}
+    ]
+  },
+  {
+    "id": "03-co-hoa-rot-tra-quay-cham",
+    "duration": 7,
+    "desc": "Cô Hoa rót trà đá, phiên bản quay chậm 🐢🧊 Xem đến cuối nhé!",
+    "tags": "#tradavihe #slowmotion #trada #hanoi #vibecoding",
+    "start": {"seat": 1},
+    "shots": [
+      {"t0": 0, "cap": "Cảnh này phải <b>xem chậm</b> 🐢", "caps": [[1.4, "Rót trà… <b>thả đá</b>…"]],
+       "cam": {"tx": -5.85, "ty": 1.05, "tz": 7.0, "yaw": 3.3, "pitch": 0.12, "dist": 1.8}, "to": {"dist": 1.45}},
+      {"t0": 2.5, "blend": 0.4, "cap": "…bay thẳng<br><b>vào tay khách</b>!",
+       "cam": {"tx": -4.5, "ty": 1.05, "tz": 5.6, "yaw": 2.36, "pitch": 0.3, "dist": 5.6}},
+      {"t0": 3.9, "blend": 0.6, "cap": "Trà đá <b>3.000đ</b><br>phục vụ tận bàn",
+       "cam": {"tx": -3.0, "ty": 1.0, "tz": 3.3, "yaw": 4.36, "pitch": 0.22, "dist": 3.0}}
+    ],
+    "events": [
+      {"t": 0.6, "type": "tea"},
+      {"t": 0.95, "type": "speed", "v": 0.35},
+      {"t": 3.6, "type": "speed", "v": 1},
+      {"t": 4.3, "type": "sip"},
+      {"t": 4.8, "type": "say", "text": "Mát lạnh! Ngon quá cô ơi."}
+    ]
+  },
+  {
+    "id": "04-chu-tu-xe-om",
+    "duration": 20,
+    "desc": "Chú Tư xe ôm 20 năm hỏi một câu khiến AI cũng phải bó tay 😂",
+    "tags": "#tradavihe #xeom #hanoi #AI #vibecoding",
+    "start": {"seat": 1},
+    "shots": [
+      {"t0": 0, "cap": "Chú Tư xe ôm<br>ngồi quán này <b>20 năm</b>",
+       "cam": {"tx": -2.95, "ty": 0.95, "tz": 3.05, "yaw": 0.1, "pitch": 0.26, "dist": 4.0}, "to": {"yaw": 0.2}},
+      {"t0": 3.0,
+       "cam": {"tx": -3.18, "ty": 1.15, "tz": 2.55, "yaw": -0.35, "pitch": 0.15, "dist": 2.6}, "to": {"yaw": -0.2}, "cap": "Chú Tư xe ôm<br>ngồi quán này <b>20 năm</b>"},
+      {"t0": 5.6, "cap": "Hồi đó làm gì có <b>app</b>",
+       "cam": {"tx": -2.95, "ty": 0.95, "tz": 3.05, "yaw": 0.12, "pitch": 0.26, "dist": 4.0}, "to": {"yaw": 0.3}},
+      {"t0": 12, "cap": "Câu hỏi <b>khó nhất năm</b> 😂",
+       "cam": {"tx": -3.18, "ty": 1.15, "tz": 2.55, "yaw": -0.3, "pitch": 0.12, "dist": 2.5}},
+      {"t0": 14.8, "cap": "Cô Hoa: <b>vẫn phải cô!</b>",
+       "cam": {"tx": -5.85, "ty": 1.1, "tz": 7.0, "yaw": 3.3, "pitch": 0.14, "dist": 2.2}},
+      {"t0": 17.2, "cap": "Follow để nghe<br><b>chú Tư kể tiếp</b> 👇",
+       "cam": {"tx": -2.95, "ty": 0.95, "tz": 3.05, "yaw": 0.2, "pitch": 0.3, "dist": 4.4}, "to": {"yaw": 0.4}}
+    ],
+    "events": [
+      {"t": 0.8, "type": "say", "text": "Chú chạy xe ôm lâu chưa chú?"},
+      {"t": 3.2, "type": "say", "who": "tu", "text": "Hai mươi năm rồi cháu ạ."},
+      {"t": 6.0, "type": "say", "who": "tu", "text": "Hồi đó làm gì có app gọi xe."},
+      {"t": 9.3, "type": "say", "text": "Giờ AI làm được cả quán trà đá đấy chú!"},
+      {"t": 12.3, "type": "say", "who": "tu", "text": "Thế AI có rót trà được không?"},
+      {"t": 15.0, "type": "say", "who": "co", "text": "Rót trà thì vẫn phải cô!"},
+      {"t": 17.6, "type": "act", "act": "cheers"},
+      {"t": 17.6, "type": "act", "who": "tu", "act": "cheers"},
+      {"t": 17.6, "type": "say", "who": "tu", "text": "Dô!"}
+    ]
+  },
+  {
+    "id": "05-anh-shipper",
+    "duration": 18,
+    "desc": "Anh shipper ghé quán giữa ca, cô Hoa ném cốc trà xa 8 mét 🛵🧊",
+    "tags": "#shipper #tradavihe #hanoi #trada #vibecoding",
+    "start": {"seat": 6},
+    "shots": [
+      {"t0": 0, "cap": "Anh shipper ghé quán<br><b>giữa ca giao hàng</b>",
+       "cam": {"tx": 2.35, "ty": 1.0, "tz": 2.7, "yaw": -0.97, "pitch": 0.15, "dist": 2.4}, "to": {"yaw": -0.8}},
+      {"t0": 7.2, "cap": "Cô Hoa <b>ném cốc</b><br>xa 8 mét 😳",
+       "cam": {"tx": -1.8, "ty": 1.1, "tz": 5.1, "yaw": 2.09, "pitch": 0.3, "dist": 7.5}},
+      {"t0": 11.2, "cap": "Uống xong<br><b>chạy đơn tiếp</b> 🛵",
+       "cam": {"tx": 2.35, "ty": 1.0, "tz": 2.7, "yaw": -0.9, "pitch": 0.15, "dist": 2.2}},
+      {"t0": 15.2, "cap": "Bạn ghé quán chưa?<br><b>link ở bio 👇</b>",
+       "cam": {"tx": -1.0, "ty": 1.3, "tz": 3.5, "yaw": 3.9, "pitch": 0.45, "dist": 8}, "to": {"yaw": 4.3, "dist": 11}}
+    ],
+    "events": [
+      {"t": 0, "type": "set", "who": "ship", "props": {"hasCup": false, "cup": 0}},
+      {"t": 0.8, "type": "say", "who": "ship", "text": "Đơn này giao nốt là về."},
+      {"t": 3.2, "type": "say", "text": "Ngồi làm cốc trà đã anh!"},
+      {"t": 5.4, "type": "say", "who": "ship", "text": "5 phút thôi, khách đang đợi!"},
+      {"t": 7.4, "type": "serve", "who": "ship", "reply": "Trà đá cho anh Khoa đây!"},
+      {"t": 11.6, "type": "act", "who": "ship", "act": "sip"},
+      {"t": 12.6, "type": "say", "who": "ship", "text": "Đỉnh! Mai anh lại ghé."},
+      {"t": 15.4, "type": "act", "who": "ship", "act": "cheers"},
+      {"t": 15.4, "type": "act", "act": "cheers"}
+    ]
+  },
+  {
+    "id": "06-mot-vong-pho-dem",
+    "duration": 16,
+    "desc": "Một vòng phố đêm Hà Nội phiên bản 3D 🌙 Bạn thấy chi tiết nào giống thật nhất?",
+    "tags": "#hanoi #phodem #tradavihe #3d #vibecoding",
+    "start": {"seat": 1},
+    "shots": [
+      {"t0": 0, "blend": 0,
+       "caps": [[0, "Một vòng<br><b>phố đêm Hà Nội</b> 🌙"], [4, "Dây điện <b>chằng chịt</b>,<br>mái bạt sọc xanh"], [8, "Xe máy<br><b>không bao giờ ngớt</b>"], [12, "Cây bàng, xe đỗ vỉa hè…<br><b>giống thật không?</b>"]],
+       "cam": {"tx": -14, "ty": 1.4, "tz": 2.2, "yaw": 4.3, "pitch": 0.22, "dist": 5}, "to": {"tx": 10}}
+    ],
+    "events": []
+  },
+  {
+    "id": "07-cung-ly-1-2-3-do",
+    "duration": 12,
+    "desc": "1, 2, 3… DÔ! 🍻 Trà đá cũng phải cụng cho đúng điệu",
+    "tags": "#tradavihe #dô #hanoi #trada #vibecoding",
+    "start": {"seat": 1},
+    "shots": [
+      {"t0": 0, "blend": 0,
+       "caps": [[0.4, "Một…"], [1.8, "Hai…"], [3.2, "Ba…"], [4.6, "<b>DÔ!</b> 🍻"], [7.6, "Thêm <b>vòng nữa</b>!"], [9.6, "Trà đá thôi mà<br>cũng phải <b>đúng điệu</b>"]],
+       "cam": {"tx": -3.3, "ty": 0.95, "tz": 3.1, "yaw": -1.0, "pitch": 0.3, "dist": 3.6}, "to": {"yaw": 0.5}}
+    ],
+    "events": [
+      {"t": 0.4, "type": "say", "text": "Một…"},
+      {"t": 1.8, "type": "say", "who": "tu", "text": "Hai…"},
+      {"t": 3.2, "type": "say", "text": "Ba…"},
+      {"t": 4.6, "type": "say", "text": "DÔ!!!"},
+      {"t": 4.6, "type": "act", "act": "cheers"},
+      {"t": 4.6, "type": "act", "who": "tu", "act": "cheers"},
+      {"t": 7.6, "type": "say", "who": "tu", "text": "Thêm vòng nữa!"},
+      {"t": 8.6, "type": "act", "act": "cheers"},
+      {"t": 8.6, "type": "act", "who": "tu", "act": "cheers"},
+      {"t": 10.2, "type": "act", "act": "sip"},
+      {"t": 10.2, "type": "act", "who": "tu", "act": "sip"}
+    ]
+  },
+  {
+    "id": "08-comment-ten-ban",
+    "duration": 14,
+    "desc": "Comment tên bạn 👇 video sau cô Hoa rót trà mời bạn!",
+    "tags": "#tradavihe #comment #hanoi #trada #vibecoding",
+    "start": {"seat": 1},
+    "shots": [
+      {"t0": 0, "cap": "Comment <b>tên bạn</b> 👇",
+       "cam": {"tx": -3.0, "ty": 1.0, "tz": 3.3, "yaw": 4.36, "pitch": 0.22, "dist": 3.0}, "to": {"dist": 2.6}},
+      {"t0": 3.5, "cap": "Video sau<br><b>cô Hoa rót trà mời bạn</b>",
+       "cam": {"tx": -5.85, "ty": 1.1, "tz": 7.0, "yaw": 3.3, "pitch": 0.14, "dist": 2.2}},
+      {"t0": 6.4, "cap": "Rót tận tay, <b>ghi sổ tên bạn</b> ✍️",
+       "cam": {"tx": -4.5, "ty": 1.05, "tz": 5.6, "yaw": 2.36, "pitch": 0.3, "dist": 5.6}},
+      {"t0": 10, "cap": "Nhớ <b>follow</b><br>để xem tên mình nhé!",
+       "cam": {"tx": -2.95, "ty": 0.95, "tz": 3.05, "yaw": 0.15, "pitch": 0.28, "dist": 4.2}, "to": {"yaw": 0.35}}
+    ],
+    "events": [
+      {"t": 0.5, "type": "say", "text": "Ai comment tên, mình mời một cốc!"},
+      {"t": 3.8, "type": "say", "who": "co", "text": "Ghi sổ cho ai đây cháu?"},
+      {"t": 5.6, "type": "tea"},
+      {"t": 10.4, "type": "act", "act": "cheers"},
+      {"t": 10.4, "type": "act", "who": "tu", "act": "cheers"}
+    ]
+  },
+  {
+    "id": "09-quan-tiep-theo",
+    "duration": 14,
+    "desc": "Quán trà đá xong rồi, quán tiếp theo làm gì đây? Comment số 1, 2 hay 3 👇",
+    "tags": "#tradavihe #vibecoding #hanoi #pho #biahoi",
+    "start": {"seat": 1},
+    "shots": [
+      {"t0": 0, "blend": 0,
+       "caps": [[0, "Quán trà đá <b>xong rồi</b>…"], [3, "Quán tiếp theo<br>mình làm <b>gì</b>?"], [6, "1️⃣ Phở bò 🍜<br>2️⃣ Chè 🍧<br>3️⃣ Bia hơi 🍺"], [10.5, "Comment <b>số</b> 👇"]],
+       "cam": {"tx": -3.0, "ty": 1.5, "tz": 3.5, "yaw": 3.6, "pitch": 0.55, "dist": 13}, "to": {"yaw": 4.6, "pitch": 0.45, "dist": 10}}
+    ],
+    "events": [
+      {"t": 7.5, "type": "say", "who": "co", "text": "Phở thì cô cũng nấu được!"},
+      {"t": 9.5, "type": "say", "who": "tu", "text": "Bia hơi đi cháu!"}
+    ]
+  },
+  {
+    "id": "10-huong-duong-chem-gio",
+    "duration": 16,
+    "desc": "Đặc sản trà đá vỉa hè: hướng dương và chém gió 🌻 AI có làm được không?",
+    "tags": "#tradavihe #huongduong #hanoi #AI #vibecoding",
+    "start": {"seat": 1},
+    "shots": [
+      {"t0": 0, "caps": [[0, "Đặc sản<br><b>trà đá vỉa hè</b>:"], [2, "<b>Hướng dương</b><br>tách tách…"]],
+       "cam": {"tx": -2.95, "ty": 0.95, "tz": 3.05, "yaw": 0.12, "pitch": 0.24, "dist": 3.4}, "to": {"yaw": 0.3}},
+      {"t0": 5, "cap": "…và <b>chém gió</b><br>không dứt",
+       "cam": {"tx": -2.95, "ty": 0.95, "tz": 3.05, "yaw": 0.25, "pitch": 0.26, "dist": 3.8}},
+      {"t0": 7.8, "cap": "…và <b>chém gió</b><br>không dứt",
+       "cam": {"tx": -3.18, "ty": 1.15, "tz": 2.55, "yaw": -0.35, "pitch": 0.15, "dist": 2.6}, "to": {"yaw": -0.2}},
+      {"t0": 10.3, "cap": "…và <b>chém gió</b><br>không dứt",
+       "cam": {"tx": -2.95, "ty": 0.95, "tz": 3.05, "yaw": 0.1, "pitch": 0.26, "dist": 3.6}},
+      {"t0": 12.4, "cap": "Vậy là người<br>vẫn <b>hơn AI</b> 😎",
+       "cam": {"tx": -2.95, "ty": 0.95, "tz": 3.05, "yaw": 0.2, "pitch": 0.28, "dist": 4.2}, "to": {"yaw": 0.4}}
+    ],
+    "events": [
+      {"t": 0.8, "type": "act", "act": "seed"},
+      {"t": 1.4, "type": "act", "who": "tu", "act": "seed"},
+      {"t": 2.2, "type": "act", "act": "seed"},
+      {"t": 2.8, "type": "act", "who": "tu", "act": "seed"},
+      {"t": 5.2, "type": "say", "text": "Ông biết gì chưa, AI giờ viết web 5 phút."},
+      {"t": 8.0, "type": "say", "who": "tu", "text": "Thế AI có cắn hướng dương được không?"},
+      {"t": 10.6, "type": "say", "text": "…chưa ạ."},
+      {"t": 12.8, "type": "act", "act": "seed"},
+      {"t": 12.8, "type": "act", "who": "tu", "act": "seed"},
+      {"t": 14.2, "type": "act", "act": "cheers"},
+      {"t": 14.2, "type": "act", "who": "tu", "act": "cheers"}
+    ]
+  }
+]
