@@ -106,6 +106,15 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lamp);outline-o
   .lines button{font-size:12.5px;padding:7px 10px}
   .drawer{top:56px;max-height:calc(100% - 140px);overflow:auto}
 }
+.film .hud,.film .bar,.film .hint,.film .joy,.film .entry,.film .pop,.film .drawer{display:none!important}
+.film .tag i:not(.npc){display:none}
+.film .cap,.film .bub{animation:none}
+.film .tag{font-size:14px;padding:3px 10px}
+.film .bub{font-size:15px;max-width:250px;padding:6px 12px}
+.cap{position:absolute;z-index:8;left:50%;top:13%;transform:translateX(-50%);width:88%;text-align:center;font-family:var(--f-sign);font-size:33px;line-height:1.18;color:#fff;
+  text-shadow:0 3px 0 #000,0 0 3px #000,0 0 3px #000,2px 2px 0 #000,-2px -2px 0 #000,2px -2px 0 #000,-2px 2px 0 #000;animation:capIn .35s ease;text-wrap:balance}
+.cap b{color:var(--sign-ink);font-weight:400}
+@keyframes capIn{from{transform:translateX(-50%) scale(.85);opacity:0}}
 @media (max-height:480px) and (orientation:landscape){
   .joy{bottom:max(14px,env(safe-area-inset-bottom,0px));width:96px;height:96px}
   .bar{left:auto;right:max(12px,env(safe-area-inset-right,0px));transform:none}
@@ -225,6 +234,10 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--lamp);outline-o
 <script>
 (function(){
 const $ = id => document.getElementById(id);
+// ?film=1: chế độ quay video theo kịch bản, thời gian do trình quay điều khiển từng khung
+const FILM = /[?&]film\b/.test(location.search);
+let filmNow = 0;
+if (FILM) { performance.now = () => filmNow; document.documentElement.classList.add("film"); }
 const store = {
   get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } },
   set(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
@@ -986,8 +999,11 @@ function collide(x, z){
 function frame(now){
   const dt = Math.min(0.05, (now - last) / 1000); last = now; t += dt;
 
+  if (FILM) director(now / 1000);
+
   // người chơi
-  if (player && entered) {
+  if (player && entered && FILM) { placeChar(player); animate(player.ch, t, dt, player); }
+  else if (player && entered) {
     let fwd = (keys.KeyW || keys.ArrowUp ? 1 : 0) - (keys.KeyS || keys.ArrowDown ? 1 : 0) - joy.y;
     let rgt = (keys.KeyD || keys.ArrowRight ? 1 : 0) - (keys.KeyA || keys.ArrowLeft ? 1 : 0) + joy.x;
     const m = Math.hypot(fwd, rgt);
@@ -1054,10 +1070,13 @@ function frame(now){
   }
 
   // camera
-  let tx, ty, tz;
-  if (player && entered) { tx = player.ch.position.x; ty = player.ch.position.y + 1.05; tz = player.ch.position.z; }
-  else { yaw += dt * 0.08; tx = -2.6; ty = 1.0; tz = 3.6; }
-  const cd = entered ? dist : 7.5;
+  let tx, ty, tz, cd;
+  if (FILM) { ({tx, ty, tz, yaw, pitch, dist:cd} = filmCam); }
+  else {
+    if (player && entered) { tx = player.ch.position.x; ty = player.ch.position.y + 1.05; tz = player.ch.position.z; }
+    else { yaw += dt * 0.08; tx = -2.6; ty = 1.0; tz = 3.6; }
+    cd = entered ? dist : 7.5;
+  }
   camera.position.set(tx + Math.sin(yaw) * Math.cos(pitch) * cd, ty + Math.sin(pitch) * cd, tz + Math.cos(yaw) * Math.cos(pitch) * cd);
   if (camera.position.y < 0.3) camera.position.y = 0.3;
   camera.lookAt(tx, ty, tz);
@@ -1079,7 +1098,61 @@ function frame(now){
   });
 
   if (!entered && pvChar) { pvChar.rotation.y += dt * 0.6; animate(pvChar, t, dt, {seat:-1, moving:false, hasCup:true, cup:80}); pvR.render(pvScene, pvCam); }
-  requestAnimationFrame(frame);
+  if (!FILM) requestAnimationFrame(frame);
+}
+
+// ---------- kịch bản quay video (?film=1), khoảng 22 giây ----------
+const filmCam = {tx:0, ty:1, tz:0, yaw:Math.PI, pitch:0.4, dist:8};
+const fired = {};
+const once = (k, f) => { if (!fired[k]) { fired[k] = true; f(); } };
+const sm = k => k <= 0 ? 0 : k >= 1 ? 1 : k * k * (3 - 2 * k);
+const mix = (a, b, k) => a + (b - a) * k;
+function caption(html){
+  let c = $("cap");
+  if (!c) { c = document.createElement("div"); c.id = "cap"; c.className = "cap"; $("app").appendChild(c); }
+  if (c.dataset.h === html) return;
+  c.dataset.h = html; c.innerHTML = html; c.hidden = !html;
+  c.style.animation = "none"; void c.offsetWidth; c.style.animation = "";
+}
+const WALK = [[-0.5, -0.5], [-1.6, 2.4], [-2.55, 3.4]];
+function walkAt(k){
+  const seg = [Math.hypot(WALK[1][0]-WALK[0][0], WALK[1][1]-WALK[0][1]), Math.hypot(WALK[2][0]-WALK[1][0], WALK[2][1]-WALK[1][1])];
+  let d = k * (seg[0] + seg[1]), i = d < seg[0] ? 0 : 1; if (i) d -= seg[0];
+  const a = WALK[i], b = WALK[i+1], f = d / seg[i];
+  return {x:mix(a[0], b[0], f), z:mix(a[1], b[1], f), r:Math.atan2(b[0]-a[0], b[1]-a[1])};
+}
+const SHOTS = [
+  {t0:0,    cap:"Không biết code…<br>nhờ AI làm cả <b>quán trà đá vỉa hè</b>",
+   cam:ft => { const k = sm(ft / 3.5); return {tx:-3.2, ty:1.5, tz:3.4, yaw:Math.PI + 0.95 - 0.6*k, pitch:0.42 - 0.04*k, dist:12.5 - 2.5*k}; }},
+  {t0:3.5,  cap:"Ngồi <b>ghế nhựa xanh đỏ</b><br>đúng chất Hà Nội",
+   cam:() => ({tx:player.ch.position.x, ty:1.1, tz:player.ch.position.z, yaw:Math.PI + 0.25, pitch:0.36, dist:5.4})},
+  {t0:7.4,  cap:"Gọi một tiếng<br>là <b>cô Hoa rót tận tay</b>",
+   cam:ft => ({tx:-4.5, ty:1.05, tz:5.6, yaw:Math.PI - 0.78 + (ft - 7.4) * 0.015, pitch:0.3, dist:5.6})},
+  {t0:13.3, cap:"Chém gió <b>cả đêm</b><br>không hết chuyện",
+   cam:ft => ({tx:-2.95, ty:0.95, tz:3.05, yaw:0.12 + (ft - 13.3) * 0.04, pitch:0.26, dist:4.0})},
+  {t0:18.6, cap:"Vào quán ngồi miễn phí<br><b>link ở bio 👇</b>",
+   cam:ft => { const k = sm((ft - 18.6) / 3.4); return {tx:-2.6, ty:1.4, tz:3.6, yaw:Math.PI + 0.85 + 0.45*k, pitch:0.42 + 0.3*k, dist:7 + 6*k}; }}
+];
+function director(ft){
+  // nhân vật chính
+  if (ft < 3.5) { Object.assign(me, {x:WALK[0][0], z:WALK[0][1], r:0.2, seat:-1}); player.moving = false; }
+  else if (ft < 6.6) { Object.assign(me, walkAt(sm((ft - 3.5) / 3.1) * 0.15 + (ft - 3.5) / 3.1 * 0.85), {seat:-1}); player.moving = true; }
+  else { once("sit", () => { me.seat = 1; me.x = seats[1].x; me.z = seats[1].z; me.r = seats[1].r; }); player.moving = false; }
+  syncPlayer();
+  // hành động
+  if (ft > 7.8) once("tea", () => $("bTea").click());
+  if (ft > 11.6) once("sip", () => $("bSip").click());
+  const hush = st => { st.sayAt = 0; st.label.querySelector(".bub").hidden = true; };
+  if (ft > 13.6) once("talk", () => { hush(player); doSay("Code chạy được thì đừng ai động vào."); });
+  if (ft > 15.4) once("tu", () => { hush(player); sayBubble(npcStates[1], "Thế thì uống trà đi, động gì!"); });
+  if (ft > 17.2) once("cheers", () => { hush(npcStates[1]); $("bCheers").click(); npcStates[1].anim = {type:"cheers", t0:performance.now()}; });
+  // camera + phụ đề, chuyển cảnh mượt trong 1 giây
+  let i = 0; while (i + 1 < SHOTS.length && ft >= SHOTS[i+1].t0) i++;
+  const cur = SHOTS[i].cam(ft), k = i ? sm((ft - SHOTS[i].t0) / 1.0) : 1;
+  const prev = i ? SHOTS[i-1].cam(ft) : cur;
+  for (const key in cur) filmCam[key] = mix(prev[key], cur[key], k);
+  caption(SHOTS[i].cap);
+  $("cap").style.opacity = String(sm((ft - SHOTS[i].t0) / 0.3));
 }
 
 // ---------- khởi động ----------
@@ -1088,7 +1161,13 @@ function frame(now){
   buildWorld(); buildTraffic();
   npcs.forEach(o => { const st = charState(o, "npc"); if (o.seat >= 0) { st.x = seats[o.seat].x; st.z = seats[o.seat].z; } npcStates.push(st); });
   refreshPreview(); resize(); updateCups();
-  requestAnimationFrame(frame);
+  if (FILM) {
+    npcTimer = 1e9;
+    me.name = "Code Dạo"; me.color = "#d8433a"; me.gender = "m"; nameIn.value = me.name;
+    enter();
+    window.__step = n => { for (let i = 0; i < n; i++) { filmNow += 1000 / 30; frame(filmNow); } return filmNow; };
+    window.__ready = true;
+  } else requestAnimationFrame(frame);
 })();
 
 // ---------- Supabase: cùng giao diện với room/db của claude.ai ----------
